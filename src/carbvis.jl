@@ -3,7 +3,7 @@ using Pkg
 Pkg.activate(".")
 
 using CSV, DataFrames
-using GLMakie, Colors, ColorSchemes
+using WGLMakie, Colors, ColorSchemes
 using FileIO, Downloads
 using GeometryBasics
 
@@ -58,31 +58,33 @@ fig =  Figure(resolution = (800,800), fontsize = 24)
 
 ax = LScene(fig[1,1], show_axis = false)
 
-pltobj = meshscatter!(ax, toPoints3D;
-        markersize = mag/2000,
-        color =mag,
-        colormap = to_colormap(:tab10), 
-        shading = true, 
-        ambient = Vec3f(1.0,1.0,1.0),
-        )
-
 surface!(ax, sphere(; r = 1.0)..., 
         color = tuple.(earth_img, 0.9),
         shading = false, 
         transparency = true         
         )
 
+pltobj = meshscatter!(ax, toPoints3D;
+        markersize = mag/1000,
+        color =mag
+	)
+        #colormap = to_colormap(:tab10), 
+        #shading = true, 
+        #ambient = Vec3f(1.0,1.0,1.0)
+        #)
+
 Colorbar(fig[1,2], pltobj, label="Number of Years", height = Relative(1/2))
 Label(fig[1, 1, Bottom()], "Visualization by @mohitanand")
 Label(fig[1, 1, Top()], "Fluxnet data availablity : 211 sites")
 
-zoom!(ax.scene, cameracontrols(ax.scene), 0.65)
-rotate!(ax.scene, 3.0)
+#zoom!(ax.scene, cameracontrols(ax.scene), 0.65)
+#rotate!(ax.scene, 3.0)
     ## display(fig)
-record(fig, joinpath(@__DIR__, "cflux_white_fast_small.mp4"), framerate = 24) do io
-    for i in 3.0:0.015:9.5
-        rotate!(ax.scene, i)
-        recordframe!(io)  # record a new frame
-    end
-end
+#record(fig, joinpath(@__DIR__, "cflux_white_fast_small.mp4"), framerate = 24) do io
+#    for i in 3.0:0.015:9.5
+#        rotate!(ax.scene, i)
+#        recordframe!(io)  # record a new frame
+#    end
+#end
 set_theme!()
+
